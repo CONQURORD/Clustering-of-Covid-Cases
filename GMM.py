@@ -1,11 +1,6 @@
-'''
-    Author:
-    Arpit Parwal <aparwal@usc.edu>
-    Yeon-soo Park <yeonsoop@usc.edu>
-    Vanessa Tan <tanvanes@usc.edu>
-    Sudeeptha Mouni Ganji <sganji@usc.edu>
 
-'''
+
+
 
 
 import pandas as pd
@@ -118,9 +113,7 @@ data = temp_data.drop(columns=["Country_Region","pop2020", "Confirmed", "total_c
 print("DATA FOR CLUSTERING\n", data.tail(10))
 print("\nFeatures:", data.columns)
 
-#------------------------------------------------------------------------------------------
-# CLUSTER WITH UNSCALED DATA
-#------------------------------------------------------------------------------------------
+
 data_unscaled = temp_data.drop(columns=["Country_Region","pop2020", "Confirmed", "total_covid_19_tests"])
 
 
@@ -205,9 +198,7 @@ cluster_avgs = pd.DataFrame(round(df_cluster.groupby('cluster').mean(),1))
 print("\nCLUSTER AVERAGES\n", cluster_avgs)
 
 
-#------------------------------------------------------------------------------------------
-# CLUSTER WITH TOP FACTORS & SCALED DATA
-#------------------------------------------------------------------------------------------
+
 df_top = df_cluster.drop(columns=['cluster'])
 gmm = GMM(n_components=5).fit(df_top)
 pred = gmm.predict(df_top)
