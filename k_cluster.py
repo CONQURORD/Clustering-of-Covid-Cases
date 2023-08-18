@@ -1,11 +1,7 @@
-'''
-    Author:
-    Arpit Parwal <aparwal@usc.edu>
-    Yeon-soo Park <yeonsoop@usc.edu>
-    Vanessa Tan <tanvanes@usc.edu>
-    Sudeeptha Mouni Ganji <sganji@usc.edu>
 
-'''
+
+
+
 
 import pandas as pd
 import numpy as np
@@ -22,10 +18,8 @@ from sklearn.feature_selection import mutual_info_regression
 
 INPUT_FILE = "./dataSource/features_combined.csv"
 
-## Add feature names that you want to filter out
 NULL_FEATURES = ['country', 'Country_Region', 'entity', 'total_covid_19_tests']
 
-## Add Features that you want to load from features_combined.csv
 FILTER_FEATURES = ['Country_Region', 'total_covid_19_tests', 'Confirmed', 'pop2020',
                    'HDI Rank (2018)', 'inform_risk', 'inform_p2p_hazard_and_exposure_dimension',
                    'population_density', 'population_living_in_urban_areas',
@@ -131,9 +125,6 @@ indicator_data = temp_data.drop(columns=["Country_Region", "pop2020", "Confirmed
 print("DATA FOR CLUSTERING\n", indicator_data.tail(10))
 print("\nfeatures:", indicator_data.columns)
 
-# ------------------------------------------------------------------------------------------
-# CLUSTER WITH UNSCALED DATA
-# ------------------------------------------------------------------------------------------
 data_unscaled = temp_data.drop(columns=["Country_Region", "pop2020", "Confirmed", "total_covid_19_tests"])
 
 # Plot inertia to find the best number of clusters to use
@@ -170,7 +161,7 @@ print(data_unscaled.tail(10))
 print("\nCluster counts:")
 print(data_unscaled['cluster'].value_counts())
 
-# Call plot_clusters function to plot clusters with unscaled_data
+
 plot_clusters(data_unscaled, title="Clusters With UnScaled Data Based On All Factors")
 
 print("\nCLUSTERS WITHOUT SCALING")
@@ -203,9 +194,6 @@ cluster_avgs = pd.DataFrame(round(df_cluster.groupby('cluster').mean(), 1))
 print("\nCLUSTER UNSCALED AVERAGES\n", cluster_avgs)
 print("===========================")
 
-# ------------------------------------------------------------------------------------------
-# CLUSTER WITH SCALED DATA
-# ------------------------------------------------------------------------------------------
 scaler = StandardScaler()
 print("DATA FOR CLUSTERING\n", indicator_data.tail(10))
 data_k = scaler.fit_transform(indicator_data)
@@ -227,7 +215,7 @@ kmeans = KMeans(n_clusters=5, init='k-means++')
 kmeans.fit(data_k)
 predicted_cluster = kmeans.predict(data_k)
 
-# Convert scaled matrix back into dataframe and add in column names
+
 df_k = pd.DataFrame(data_k)
 df_k.columns = indicator_data.columns
 df_k["country_region"] = temp_data["Country_Region"]
@@ -261,9 +249,6 @@ cluster_avgs = pd.DataFrame(round(df_cluster.groupby('cluster').mean(), 1))
 print("\nCLUSTER SCALED AVERAGES\n", cluster_avgs)
 print("===========================")
 
-# ------------------------------------------------------------------------------------------
-# CLUSTER WITH TOP FACTORS & SCALED DATA
-# ------------------------------------------------------------------------------------------
 df_top = df_cluster.drop(columns=['cluster'])
 kmeans = KMeans(n_clusters=5, init='k-means++')
 kmeans.fit(df_top)
